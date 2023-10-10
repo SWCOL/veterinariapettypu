@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Gimnasios</title>
+    <title>Gimnasios para Mascotas</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
     <link href="assets/img/favicon.png" rel="icon">
@@ -16,6 +16,7 @@
     <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
     <style>
+        /* Estilos personalizados */
         .portfolio-item {
             border: 1px solid #ccc;
             padding: 15px;
@@ -34,48 +35,62 @@
         .add-to-cart {
             color: #007bff; /* Color azul para el enlace */
         }
+
+        /* Estilos para el cuadro azul al final */
+        #carrito {
+            background-color: #1e293b;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
     <main id="main">
-        <!-- ======= collares Section ======= -->
+        <!-- ======= Gimnasios para Mascotas Section ======= -->
         <section id="portfolio-details" class="portfolio-details">
             <div class="container">
                 <div class="row">
-                    <!-- Imagen 1 -->
+                    <!-- Producto 1 -->
                     <div class="col-lg-4">
                         <div class="portfolio-item">
-                            <img src="assets/img/portfolio/gym1.png" alt="Collar 1">
+                            <img src="assets/img/portfolio/gym1.png" alt="Gimnasio 1">
                             <div class="portfolio-description">
                                 <h3>Gimnasio "PawFit" para Perros</h3>
-                                <p>"El gimnasio "PawFit" es la solución perfecta para mantener a tu perro activo en casa. Con múltiples niveles, escaleras y juguetes incorporados, este gimnasio ofrece un espacio de juego versátil que ayudará a tu perro a mantenerse en forma y entretenido. ¡Transforma tu hogar en un paraíso de ejercicio para tu fiel compañero!"</p>
-                                <a href="#" class="add-to-cart">
+                                <p>El gimnasio "PawFit" es la solución perfecta para mantener a tu perro activo en casa. Con múltiples niveles, escaleras y juguetes incorporados, este gimnasio ofrece un espacio de juego versátil que ayudará a tu perro a mantenerse en forma y entretenido. ¡Transforma tu hogar en un paraíso de ejercicio para tu fiel compañero!</p>
+                                <p>Precio: $105.000</p>
+                                <input type="number" class="cantidad-input" id="cantidad1" value="1">
+                                <a href="#" class="add-to-cart" onclick="agregarAlCarrito('Gimnasio PawFit para Perros', 105000, 'cantidad1')">
                                     <i class="bi bi-cart"></i> Agregar al carrito
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <!-- Imagen 2 -->
+                    <!-- Producto 2 -->
                     <div class="col-lg-4">
                         <div class="portfolio-item">
-                            <img src="assets/img/portfolio/gym2.png" alt="Collar 2">
+                            <img src="assets/img/portfolio/gym2.png" alt="Gimnasio 2">
                             <div class="portfolio-description">
                                 <h3>Área de Entrenamiento "CatPlay" para Gatos</h3>
                                 <p>El área de entrenamiento "CatPlay" es un rincón de diversión y exploración diseñado especialmente para tus gatos en casa. Con plataformas de escalada, túneles y juguetes colgantes, este espacio les brinda a tus felinos una experiencia enriquecedora mientras se mantienen activos y felices. ¡Haz que tu hogar sea el lugar de juegos favorito de tus gatos!</p>
-                                <a href="#" class="add-to-cart">
+                                <p>Precio: $150.000</p>
+                                <input type="number" class="cantidad-input" id="cantidad2" value="1">
+                                <a href="#" class="add-to-cart" onclick="agregarAlCarrito('Área de Entrenamiento CatPlay para Gatos', 150000, 'cantidad2')">
                                     <i class="bi bi-cart"></i> Agregar al carrito
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <!-- Imagen 3 -->
+                    <!-- Producto 3 -->
                     <div class="col-lg-4">
                         <div class="portfolio-item">
-                            <img src="assets/img/portfolio/gym3.png" alt="Collar 3">
+                            <img src="assets/img/portfolio/gym3.png" alt="Gimnasio 3">
                             <div class="portfolio-description">
                                 <h3>Gimnasio "PawFlex" para Perros Pequeños</h3>
                                 <p>El gimnasio "PawFlex" es el lugar ideal para que tus perros pequeños ejerciten sus patitas en casa. Con rampas, plataformas elevadas y un área de juegos, este gimnasio está diseñado para proporcionar diversión y actividad física en espacios reducidos. ¡Ofrece a tus peludos amigos una forma segura de mantenerse activos y saludables en casa!</p>
-                                <a href="#" class="add-to-cart">
+                                <p>Precio: $200.000</p>
+                                <input type="number" class="cantidad-input" id="cantidad3" value="1">
+                                <a href="#" class="add-to-cart" onclick="agregarAlCarrito('Gimnasio PawFlex para Perros Pequeños', 200000, 'cantidad3')">
                                     <i class="bi bi-cart"></i> Agregar al carrito
                                 </a>
                             </div>
@@ -85,6 +100,89 @@
             </div>
         </section><!-- Fin de la sección -->
     </main><!-- End #main -->
+
+    <!-- Cuadro azul al final (Carrito de compras) -->
+    <div id="carrito">
+        <h2>Carrito de compras</h2>
+        <ul id="listaCarrito"></ul>
+        <p>Total: <span id="totalCarrito">$0</span></p>
+        <a href="carrito.html">Ir a pago</a>
+    </div>
+
+    <script>
+        // Función para agregar productos al carrito (similar a la página de referencia)
+        function agregarAlCarrito(producto, precio, cantidadId) {
+            const cantidadInput = document.getElementById(cantidadId);
+            const cantidad = parseInt(cantidadInput.value);
+
+            if (cantidad > 0) {
+                const subtotal = precio * cantidad;
+                const item = {
+                    producto: producto,
+                    precio: precio,
+                    cantidad: cantidad,
+                    subtotal: subtotal
+                };
+
+                carrito.push(item);
+                mostrarCarrito();
+
+                // Actualizar localStorage
+                localStorage.setItem('carrito', JSON.stringify(carrito));
+            } else {
+                alert('Ingresa una cantidad válida.');
+            }
+        }
+
+        // Función para mostrar el carrito de compras (similar a la página de referencia)
+        function mostrarCarrito() {
+            const listaCarrito = document.getElementById('listaCarrito');
+            listaCarrito.innerHTML = '';
+
+            let totalCarrito = 0;
+
+            carrito.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${item.cantidad} x ${item.producto}: $${item.subtotal}`;
+
+                // Agregar botón para eliminar producto
+                const eliminarButton = document.createElement('button');
+                eliminarButton.textContent = 'Eliminar';
+                eliminarButton.onclick = () => eliminarProducto(index);
+
+                li.appendChild(eliminarButton);
+                listaCarrito.appendChild(li);
+
+                totalCarrito += item.subtotal;
+            });
+
+            const totalCarritoSpan = document.getElementById('totalCarrito');
+            totalCarritoSpan.textContent = `$${totalCarrito}`;
+        }
+
+        // Función para eliminar un producto del carrito (similar a la página de referencia)
+        function eliminarProducto(index) {
+            carrito.splice(index, 1);
+            mostrarCarrito();
+
+            // Actualizar localStorage
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+        }
+
+        // Arreglo para almacenar los productos en el carrito
+        let carrito = [];
+
+        // Mostrar el carrito al cargar la página (similar a la página de referencia)
+        window.onload = function() {
+            const carritoJSON = localStorage.getItem('carrito');
+            if (carritoJSON) {
+                carrito = JSON.parse(carritoJSON);
+                mostrarCarrito();
+            }
+        }
+    </script>
+
+    <!-- Scripts y recursos adicionales -->
     <div id="preloader"></div>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
     <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>

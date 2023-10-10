@@ -16,6 +16,14 @@
     <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
     <style>
+        
+        #carrito {
+            background-color: #1e293b; 
+            color: #ffffff; 
+            padding: 20px; 
+            border-radius: 10px; 
+        }
+
         .portfolio-item {
             border: 1px solid #ccc;
             padding: 15px;
@@ -32,50 +40,56 @@
         }
 
         .add-to-cart {
-            color: #007bff; /* Color azul para el enlace */
+            color: #007bff; 
         }
     </style>
 </head>
 <body>
     <main id="main">
-        <!-- ======= collares Section ======= -->
+        
         <section id="portfolio-details" class="portfolio-details">
             <div class="container">
                 <div class="row">
-                    <!-- Imagen 1 -->
+                    <!-- Cama 1 -->
                     <div class="col-lg-4">
                         <div class="portfolio-item">
-                            <img src="assets/img/portfolio/cama1.png" alt="Collar 1">
+                            <img src="assets/img/portfolio/cama1.png" alt="Cama 1">
                             <div class="portfolio-description">
                                 <h3>Cama "Sueños Acogedores"</h3>
                                 <p>La cama 'Sueños Acogedores' ofrece a tu mascota un refugio de comodidad y calidez. Con su acolchado suave y diseño elegante, esta cama es el lugar perfecto para que tu peludo amigo descanse y sueñe con aventuras. ¡Dale a tu mascota la cama de sus sueños!</p>
-                                <a href="#" class="add-to-cart">
+                                <p>$40.000</p>
+                                <input type="number" class="cantidad-input" id="cantidad1" value="1">
+                                <a href="#" class="add-to-cart" onclick="agregarAlCarrito('Cama Sueños Acogedores', 40000, 'cantidad1')">
                                     <i class="bi bi-cart"></i> Agregar al carrito
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <!-- Imagen 2 -->
+                    <!-- Cama 2 -->
                     <div class="col-lg-4">
                         <div class="portfolio-item">
-                            <img src="assets/img/portfolio/cama2.png" alt="Collar 2">
+                            <img src="assets/img/portfolio/cama2.png" alt="Cama 2">
                             <div class="portfolio-description">
                                 <h3>Cama "Nube Mimos"</h3>
                                 <p>La cama 'Nube Mimos' es como un abrazo cálido para tu mascota. Su diseño tipo nube y material mullido proporcionan el máximo confort y seguridad. Tu amigo peludo se sentirá como si estuviera en el cielo. ¡Mímalo con esta cama celestial!</p>
-                                <a href="#" class="add-to-cart">
+                                <p>$50.000</p>
+                                <input type="number" class="cantidad-input" id="cantidad2" value="1">
+                                <a href="#" class="add-to-cart" onclick="agregarAlCarrito('Cama Nube Mimos', 50000, 'cantidad2')">
                                     <i class="bi bi-cart"></i> Agregar al carrito
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <!-- Imagen 3 -->
+                    <!-- Cama 3 -->
                     <div class="col-lg-4">
                         <div class="portfolio-item">
-                            <img src="assets/img/portfolio/cama3.png" alt="Collar 3">
+                            <img src="assets/img/portfolio/cama3.png" alt="Cama 3">
                             <div class="portfolio-description">
                                 <h3>Cama "Aventuras Descanso"</h3>
                                 <p>La cama 'Aventuras Descanso' es el lugar perfecto para que tu mascota recargue energías después de sus emocionantes aventuras. Con un diseño resistente y cojines de apoyo, esta cama garantiza un sueño reparador. ¡Prepárala para las próximas aventuras de tu amigo peludo!</p>
-                                <a href="#" class="add-to-cart">
+                                <p>$60.000</p>
+                                <input type="number" class="cantidad-input" id="cantidad3" value="1">
+                                <a href="#" class="add-to-cart" onclick="agregarAlCarrito('Cama Aventuras Descanso', 60000, 'cantidad3')">
                                     <i class="bi bi-cart"></i> Agregar al carrito
                                 </a>
                             </div>
@@ -84,7 +98,97 @@
                 </div>
             </div>
         </section><!-- Fin de la sección -->
-    </main><!-- End #main -->
+    </main>
+    
+    <div id="carrito">
+        <h2>Carrito de compras</h2>
+        <ul id="listaCarrito"></ul>
+        <p>Total: <span id="totalCarrito">$0</span></p>
+        <button onclick="finalizarCompra()">Ir a pago</button>
+    </div>
+    
+    <script>
+        
+        function agregarAlCarrito(producto, precio, cantidadId) {
+            const cantidadInput = document.getElementById(cantidadId);
+            const cantidad = parseInt(cantidadInput.value);
+
+            if (cantidad > 0) {
+                const subtotal = precio * cantidad;
+                const item = {
+                    producto,
+                    precio,
+                    cantidad,
+                    subtotal
+                };
+
+                
+                carrito.push(item);
+
+                
+                mostrarCarrito();
+
+                
+                localStorage.setItem('carrito', JSON.stringify(carrito));
+            } else {
+                alert('Ingresa una cantidad válida.');
+            }
+        }
+
+        
+        function mostrarCarrito() {
+            const listaCarrito = document.getElementById('listaCarrito');
+            listaCarrito.innerHTML = '';
+
+            let totalCarrito = 0;
+
+            carrito.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${item.producto} x ${item.cantidad}: $${item.subtotal}`;
+
+                
+                const eliminarButton = document.createElement('button');
+                eliminarButton.textContent = 'Eliminar';
+                eliminarButton.onclick = () => eliminarProducto(index);
+
+                li.appendChild(eliminarButton);
+                listaCarrito.appendChild(li);
+
+                totalCarrito += item.subtotal;
+            });
+
+            const totalCarritoSpan = document.getElementById('totalCarrito');
+            totalCarritoSpan.textContent = `$${totalCarrito}`;
+        }
+
+        
+        function eliminarProducto(index) {
+            carrito.splice(index, 1);
+            mostrarCarrito();
+
+            
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+        }
+
+        
+        function finalizarCompra() {
+            
+            window.location.href = 'carrito.html';
+        }
+
+        
+        let carrito = [];
+
+        
+        window.onload = function() {
+            const carritoJSON = localStorage.getItem('carrito');
+            if (carritoJSON) {
+                carrito = JSON.parse(carritoJSON);
+                mostrarCarrito();
+            }
+        }
+    </script>
+    
     <div id="preloader"></div>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
     <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>

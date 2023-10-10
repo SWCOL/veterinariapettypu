@@ -16,6 +16,14 @@
     <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
     <style>
+        
+        #carrito {
+            background-color: #1e293b; 
+            color: #ffffff; 
+            padding: 20px; 
+            border-radius: 10px; 
+        }
+
         .portfolio-item {
             border: 1px solid #ccc;
             padding: 15px;
@@ -32,50 +40,61 @@
         }
 
         .add-to-cart {
-            color: #007bff; /* Color azul para el enlace */
+            color: #007bff; 
+        }
+
+        .cantidad-input {
+            width: 40px;
         }
     </style>
 </head>
 <body>
     <main id="main">
-        <!-- ======= collares Section ======= -->
+        
+
         <section id="portfolio-details" class="portfolio-details">
             <div class="container">
                 <div class="row">
-                    <!-- Imagen 1 -->
+                    <!-- Pelota 1 -->
                     <div class="col-lg-4">
                         <div class="portfolio-item">
-                            <img src="assets/img/portfolio/pelota1.png" alt="Collar 1">
+                            <img src="assets/img/portfolio/pelota1.png" alt="Pelota 1">
                             <div class="portfolio-description">
-                                <h3>Pelota "Rebote Divertido</h3>
+                                <h3>Pelota "Rebote Divertido"</h3>
                                 <p>¡La pelota 'Rebote Divertido' es la compañera perfecta para juegos activos con tu peludo amigo! Rebota impredeciblemente para mantener a tu perro entretenido y en movimiento. ¡Diversión garantizada para horas interminables de juego!</p>
-                                <a href="#" class="add-to-cart">
+                                <p>$8.000</p>
+                                <input type="number" class="cantidad-input" id="cantidad1" value="1">
+                                <a href="#" class="add-to-cart" onclick="agregarAlCarrito('Pelota Rebote Divertido', 8000, 'cantidad1')">
                                     <i class="bi bi-cart"></i> Agregar al carrito
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <!-- Imagen 2 -->
+                    <!-- Pelota 2 -->
                     <div class="col-lg-4">
                         <div class="portfolio-item">
-                            <img src="assets/img/portfolio/pelota2.png" alt="Collar 2">
+                            <img src="assets/img/portfolio/pelota2.png" alt="Pelota 2">
                             <div class="portfolio-description">
                                 <h3>Pelota "Sabor a Aventura"</h3>
                                 <p>La pelota 'Sabor a Aventura' es la mezcla perfecta de sabor y entretenimiento para tu perro. Llena de textura y sabor, esta pelota mantiene a tu amigo ocupado mientras disfruta de un bocado delicioso. ¡Haz que cada juego sea una aventura culinaria!</p>
-                                <a href="#" class="add-to-cart">
+                                <p>$9.000</p>
+                                <input type="number" class="cantidad-input" id="cantidad2" value="1">
+                                <a href="#" class="add-to-cart" onclick="agregarAlCarrito('Pelota Sabor a Aventura', 9000, 'cantidad2')">
                                     <i class="bi bi-cart"></i> Agregar al carrito
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <!-- Imagen 3 -->
+                    <!-- Pelota 3 -->
                     <div class="col-lg-4">
                         <div class="portfolio-item">
-                            <img src="assets/img/portfolio/pelota3.png" alt="Collar 3">
+                            <img src="assets/img/portfolio/pelota3.png" alt="Pelota 3">
                             <div class="portfolio-description">
                                 <h3>Pelota "Resistente al Morder"</h3>
                                 <p>Diseñada para durar, la pelota 'Resistente al Morder' es la elección ideal para perros activos y juguetones. Fabricada con materiales de alta calidad, esta pelota resiste incluso las mordeduras más fuertes. ¡Ofrece a tu perro una diversión indestructible!</p>
-                                <a href="#" class="add-to-cart">
+                                <p>$10.000</p>
+                                <input type="number" class="cantidad-input" id="cantidad3" value="1">
+                                <a href="#" class="add-to-cart" onclick="agregarAlCarrito('Pelota Resistente al Morder', 10000, 'cantidad3')">
                                     <i class="bi bi-cart"></i> Agregar al carrito
                                 </a>
                             </div>
@@ -83,11 +102,100 @@
                     </div>
                 </div>
             </div>
-        </section><!-- Fin de la sección -->
-    </main><!-- End #main -->
+        </section>
+    </main>
+    
+    <div id="carrito">
+        <h2>Carrito de compras</h2>
+        <ul id="listaCarrito"></ul>
+        <p>Total: <span id="totalCarrito">$0</span></p>
+        <button onclick="finalizarCompra()">Ir a pago</button>
+    </div>
+    
+    <script>
+        
+        function agregarAlCarrito(producto, precio, cantidadId) {
+            const cantidadInput = document.getElementById(cantidadId);
+            const cantidad = parseInt(cantidadInput.value);
+
+            if (cantidad > 0) {
+                const subtotal = precio * cantidad;
+                const item = {
+                    producto,
+                    precio,
+                    cantidad,
+                    subtotal
+                };
+
+                
+                carrito.push(item);
+
+                
+                mostrarCarrito();
+
+                
+                localStorage.setItem('carrito', JSON.stringify(carrito));
+            } else {
+                alert('Ingresa una cantidad válida.');
+            }
+        }
+
+        
+        function mostrarCarrito() {
+            const listaCarrito = document.getElementById('listaCarrito');
+            listaCarrito.innerHTML = '';
+
+            let totalCarrito = 0;
+
+            carrito.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${item.producto} x ${item.cantidad}: $${item.subtotal}`;
+
+                
+                const eliminarButton = document.createElement('button');
+                eliminarButton.textContent = 'Eliminar';
+                eliminarButton.onclick = () => eliminarProducto(index);
+
+                li.appendChild(eliminarButton);
+                listaCarrito.appendChild(li);
+
+                totalCarrito += item.subtotal;
+            });
+
+            const totalCarritoSpan = document.getElementById('totalCarrito');
+            totalCarritoSpan.textContent = `$${totalCarrito}`;
+        }
+
+        
+        function eliminarProducto(index) {
+            carrito.splice(index, 1);
+            mostrarCarrito();
+
+            
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+        }
+
+        
+        function finalizarCompra() {
+            
+            window.location.href = 'carrito.html';
+        }
+
+        
+        let carrito = [];
+
+        
+        window.onload = function() {
+            const carritoJSON = localStorage.getItem('carrito');
+            if (carritoJSON) {
+                carrito = JSON.parse(carritoJSON);
+                mostrarCarrito();
+            }
+        }
+    </script>
+    
     <div id="preloader"></div>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-    <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
     <script src="assets/vendor/aos/aos.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>

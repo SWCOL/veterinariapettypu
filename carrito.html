@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petty Pu - Compras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .resumen-lista {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .resumen-lista li {
+            margin-bottom: 10px;
+        }
+        
+        .total-carrito {
+            font-weight: bold;
+        }
+
+        .eliminar-producto {
+            color: red;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Veterinaria Petty Pu - Carrito de Compras</h1>
+        <img src="assets/img/perrito.png" alt="Logo de la tienda">
+    </header>
+    
+    <div class="container">
+        <h2>Carrito de Compras</h2>
+        <div id="resumen-carrito">
+            <!-- Aquí se mostrará el resumen de las compras -->
+        </div>
+        <button onclick="regresarAlIndex()">Regresar al Inicio</button>
+    </div>
+    
+    <script>
+        // Recuperar el carrito almacenado en localStorage
+        let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+        // Función para mostrar el resumen de las compras
+        function mostrarResumen() {
+            const resumenCarrito = document.getElementById('resumen-carrito');
+            resumenCarrito.innerHTML = '';
+
+            const resumenLista = document.createElement('ul');
+            resumenLista.classList.add('resumen-lista');
+
+            let totalCarrito = 0;
+
+            carrito.forEach((item, index) => {
+                const resumenItem = document.createElement('li');
+                resumenItem.innerHTML = `${item.producto} x ${item.cantidad}: $${item.subtotal} 
+                                         <span class="eliminar-producto" onclick="eliminarProducto(${index})">Eliminar</span>`;
+                resumenLista.appendChild(resumenItem);
+
+                totalCarrito += item.subtotal;
+            });
+
+            const totalCarritoElement = document.createElement('p');
+            totalCarritoElement.textContent = `Total: $${totalCarrito}`;
+            totalCarritoElement.classList.add('total-carrito');
+
+            resumenCarrito.appendChild(resumenLista);
+            resumenCarrito.appendChild(totalCarritoElement);
+        }
+
+        // Función para eliminar un producto del carrito
+        function eliminarProducto(index) {
+            carrito.splice(index, 1);
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            mostrarResumen();
+        }
+
+        // Función para regresar al index
+        function regresarAlIndex() {
+            // Redirigir al usuario al index.html (ajusta la URL según tu estructura de carpetas)
+            window.location.href = 'index.html';
+        }
+
+        // Llamar a la función para mostrar el resumen al cargar la página
+        window.onload = function () {
+            mostrarResumen();
+        };
+    </script>
+</body>
+</html>
